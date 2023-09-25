@@ -20,7 +20,7 @@ router.post('/api/notes', (req, res) => {
 
     fs.readFile(path.join(__dirname, "./db/db.json"), "utf8", (err, data) => {
         if (err) {
-            return res.status(500).json({ error: "An error occurred reading the database. "});
+            return res.status(500).json({ error: "An error occurred reading the database. " });
         }
         const notes = JSON.parse(data);
         notes.push(newNote);
@@ -30,6 +30,26 @@ router.post('/api/notes', (req, res) => {
                 return res.status(500).json({ error: "An error occurred writing to the database." });
             }
             return res.json(newNote);
+        });
+    });
+});
+
+router.delete('/api/notes/:id', (req, res) => {
+    const noteIdToDelete = req.params.id;
+
+    fs.readFile(path.join(__dirname, "./db/db.json"), "utf8", (err, data) => {
+        if (err) {
+            return res.status(500).json({ error: "An error occurred reading the database." });
+        }
+
+        const notes = JSON.parse(data);
+        const updatedNotes = notes.filter(note => note.id !== noteIdToDelete);
+
+        fs.writeFile(path.join(__dirname, "./db/db.json"), JSON.stringify(updatedNotes), (err) => {
+            if (err) {
+                return res.status(500).json({ error: "An error occurred reading the database." });
+            }
+            return res.json({ messagre: "Note deleted!" });
         });
     });
 });
