@@ -1,12 +1,12 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
-const uuid = require('./helpers/uuid');
+const uuid = require('../helpers/uuid');
 
 const router = express.Router();
 
 router.get("/api/notes", (req, res) => {
-    fs.readFile(path.join(__dirname, "./db/db.json"), "utf8", (err, data) => {
+    fs.readFile(path.join(__dirname, "../db/db.json"), "utf8", (err, data) => {
         if (err) {
             return res.status(500).json({ error: "An error occurred reading the database." });
         }
@@ -18,14 +18,14 @@ router.post('/api/notes', (req, res) => {
     const newNote = req.body;
     newNote.id = uuid();
 
-    fs.readFile(path.join(__dirname, "./db/db.json"), "utf8", (err, data) => {
+    fs.readFile(path.join(__dirname, "../db/db.json"), "utf8", (err, data) => {
         if (err) {
             return res.status(500).json({ error: "An error occurred reading the database. " });
         }
         const notes = JSON.parse(data);
         notes.push(newNote);
 
-        fs.writeFile(path.join(__dirname, "./db/db.json"), JSON.stringify(notes), (err) => {
+        fs.writeFile(path.join(__dirname, "../db/db.json"), JSON.stringify(notes), (err) => {
             if (err) {
                 return res.status(500).json({ error: "An error occurred writing to the database." });
             }
@@ -37,7 +37,7 @@ router.post('/api/notes', (req, res) => {
 router.delete('/api/notes/:id', (req, res) => {
     const noteIdToDelete = req.params.id;
 
-    fs.readFile(path.join(__dirname, "./db/db.json"), "utf8", (err, data) => {
+    fs.readFile(path.join(__dirname, "../db/db.json"), "utf8", (err, data) => {
         if (err) {
             return res.status(500).json({ error: "An error occurred reading the database." });
         }
@@ -45,7 +45,7 @@ router.delete('/api/notes/:id', (req, res) => {
         const notes = JSON.parse(data);
         const updatedNotes = notes.filter(note => note.id !== noteIdToDelete);
 
-        fs.writeFile(path.join(__dirname, "./db/db.json"), JSON.stringify(updatedNotes), (err) => {
+        fs.writeFile(path.join(__dirname, "../db/db.json"), JSON.stringify(updatedNotes), (err) => {
             if (err) {
                 return res.status(500).json({ error: "An error occurred reading the database." });
             }
