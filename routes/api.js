@@ -1,10 +1,13 @@
+// Import required modules
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const uuid = require('../helpers/uuid');
 
+// Initialize router
 const router = express.Router();
 
+// Define GET route to retrieve notes from database
 router.get("/api/notes", (req, res) => {
     fs.readFile(path.join(__dirname, "../db/db.json"), "utf8", (err, data) => {
         if (err) {
@@ -14,6 +17,7 @@ router.get("/api/notes", (req, res) => {
     });
 });
 
+// Define POST route to add a new note to database
 router.post('/api/notes', (req, res) => {
     const newNote = req.body;
     newNote.id = uuid();
@@ -34,6 +38,7 @@ router.post('/api/notes', (req, res) => {
     });
 });
 
+// Define DELETE route to remove a note from database based on its ID
 router.delete('/api/notes/:id', (req, res) => {
     const noteIdToDelete = req.params.id;
 
@@ -54,4 +59,5 @@ router.delete('/api/notes/:id', (req, res) => {
     });
 });
 
+// Export router to be used in main server file
 module.exports = router;
