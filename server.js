@@ -4,7 +4,7 @@ const api = require('./routes/api');
 const html = require('./routes/html');  
 
 // Define port for the server to listen on
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 
 // Initialize express application
 const app = express();
@@ -23,6 +23,4 @@ app.use(api);
 app.use(html);
 
 // Start server on the specified port
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-});
+app.listen(PORT, () => console.log(`Server is running on PORT: ${PORT}`));
